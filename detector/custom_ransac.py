@@ -10,7 +10,8 @@ class RANSAC(object):
     def __init__(self):
         pass
 
-    def random_sample(self, row_coords, col_coords, n):
+    @classmethod
+    def random_sample(cls, row_coords, col_coords, n):
         """
         Method that chooses a random n number of points
         and calculates a random sample consensus based on
@@ -34,7 +35,8 @@ class RANSAC(object):
 
     # Calculation of line equation and solving them using matrix equation
     # A*P=q  -> P = A**(-1) * q
-    def find_line(self, x1, y1, x2, y2):
+    @classmethod
+    def find_line(cls, x1, y1, x2, y2):
         """
         Solving the equation of a line in matrix form.
         Algebraic form: y = ax + b
@@ -56,7 +58,8 @@ class RANSAC(object):
             return p[0], p[1]
 
     # computing consistency score (simple algebraic distance between points) for each point on the given space
-    def get_consistency_score(self, x_coords, y_coords, threshold, line_x, line_y):
+    @classmethod
+    def get_consistency_score(cls, x_coords, y_coords, threshold, line_x, line_y):
         """
         Function that calculates the consistency score based on algebraic distance for
         any point on the given space.
@@ -75,7 +78,8 @@ class RANSAC(object):
         return consistency_score
 
     # Finding the best line using RANSAC
-    def fit_RANSAC(self, image, epochs=100, sigma=2):
+    @classmethod
+    def fit_RANSAC(cls, image, epochs=100, sigma=2):
         """
         RANSAC algorithm for finding the best line on a given image.
         :param sigma: closing distance to the line (e.g. closer will be narrower line)
@@ -92,18 +96,19 @@ class RANSAC(object):
         # Compute the line with best score
         max_score = -1
         for iteration in range(epochs):
-            row_coordinates_2, column_coordinates_2 = self.random_sample(row_coordinates, column_coordinates, 2)
-            a, b = self.find_line(row_coordinates_2[0], column_coordinates_2[0], row_coordinates_2[1],
+            row_coordinates_2, column_coordinates_2 = cls.random_sample(row_coordinates, column_coordinates, 2)
+            a, b = cls.find_line(row_coordinates_2[0], column_coordinates_2[0], row_coordinates_2[1],
                              column_coordinates_2[1])
             # Computing the score
-            score = self.get_consistency_score(row_coordinates, column_coordinates, sigma, a, b)
+            score = cls.get_consistency_score(row_coordinates, column_coordinates, sigma, a, b)
             if score > max_score:
                 max_score = score
                 best_a, best_b = a, b
         return best_a, best_b
 
     # Function to extend found line on the whole image
-    def generate_extends(self, a_coords, b_coords, img_rows, img_cols):
+    @classmethod
+    def generate_extends(cls, a_coords, b_coords, img_rows, img_cols):
         """
         Function to draw (extend) found line for the whole image.
         :param a_coords: a matrix coordinates for best fitted line.

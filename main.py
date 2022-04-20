@@ -5,11 +5,10 @@ import numpy as np
 
 
 def main():
-    ransac = RANSAC()
     img = "./data/original/edged_image.png"
     image_edged = plt.imread(img)[:, :, 0]
-    best_a, best_b = ransac.fit_RANSAC(image_edged, epochs=200, sigma=2)
-    starting_point, ending_point = ransac.generate_extends(best_a, best_b, image_edged.shape[0], image_edged.shape[1])
+    best_a, best_b = RANSAC.fit_RANSAC(image_edged, epochs=200, sigma=2)
+    starting_point, ending_point = RANSAC.generate_extends(best_a, best_b, image_edged.shape[0], image_edged.shape[1])
     E2 = np.zeros((image_edged.shape[0], image_edged.shape[1], 3), dtype=np.uint8)
     E3 = np.array(255 * image_edged, dtype=np.uint8)
     E2[:, :, 0] = E3
