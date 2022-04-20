@@ -1,8 +1,7 @@
-from custom_ransac import RANSAC
+from line_detection.detector.custom_ransac import RANSAC
 import matplotlib.pyplot as plt
 import cv2
 import numpy as np
-import warnings
 
 
 def main():
