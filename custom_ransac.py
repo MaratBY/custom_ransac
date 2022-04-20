@@ -1,6 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
-import cv2
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -104,4 +102,20 @@ class RANSAC(object):
                 best_a, best_b = a, b
         return best_a, best_b
 
+    # Function to extend found line on the whole image
+    def generate_extends(self, a_coords, b_coords, img_rows, img_cols):
+        """
+        Function to draw (extend) found line for the whole image.
+        :param a_coords: a matrix coordinates for best fitted line.
+        :param b_coords: b matrix coordinates for best fitted line
+        :param img_rows: image height
+        :param img_cols: image width
+        :return: tuple(<np.array>) coordinates for extended line
+        """
+        new_row_coords = int(0)
+        new_col_coords = int(a_coords * new_row_coords + b_coords)
+        extended_row_coords = int(img_rows - 1)
+        extended_col_coords = int(a_coords * extended_row_coords + b_coords)
+        # ! Be careful the below form is in (col, row). It's made in order to pass it to the OpenCV functions
+        return (new_col_coords, new_row_coords), (extended_col_coords, extended_row_coords)
 
